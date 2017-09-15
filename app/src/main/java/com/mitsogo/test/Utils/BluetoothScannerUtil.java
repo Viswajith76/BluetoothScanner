@@ -91,19 +91,6 @@ public class BluetoothScannerUtil {
         snackbar.show();
     }
 
-    public static void showProgressDialog(Context context) {
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(context.getString(R.string.progress_loading));
-        progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
-    }
-
-    public static void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }
 
     private static void customizeSnackBar(Context context, Snackbar snackbar) {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
