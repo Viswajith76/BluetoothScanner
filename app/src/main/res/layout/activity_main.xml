@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/img_outer_circle"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:background="@drawable/outer_circle_drawable" />
+
+    <ImageView
+        android:id="@+id/img_inner_circle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:background="@drawable/inner_circle_drawable" />
+
+    <ImageView
+        android:id="@+id/img_center_circle"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center"
+        android:background="@drawable/center_circle_drawable"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_bluetooth_48dp" />
+
+    <com.mitsogo.test.CustomComponents.CustomTextView
+        android:id="@+id/txt_scan"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/center_circle_drawable"
+        android:gravity="center"
+        android:text="@string/scan"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/large_text_size"
+        app:font="fonts/OpenSans-Semibold.ttf" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:gravity="center"
+        android:layout_marginBottom="40dp">
+
+        <com.mitsogo.test.CustomComponents.CustomTextView
+            android:id="@+id/txt_scan_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/scanning_for_devices"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/medium_text_size"
+            android:visibility="invisible"
+            app:font="fonts/OpenSans-Regular.ttf" />
+
+        <ImageView
+            android:id="@+id/img_stop_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_stop_white_24dp"
+            android:visibility="invisible"
+            android:tint="@android:color/holo_red_light"/>
+
+    </LinearLayout>
+
+</FrameLayout>
+
+
