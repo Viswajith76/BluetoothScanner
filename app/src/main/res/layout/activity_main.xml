@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/img_outer_circle"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="290dp"
+        android:layout_height="290dp"
         android:layout_gravity="center"
         android:background="@drawable/outer_circle_drawable" />
 
@@ -27,6 +27,7 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_gravity="center"
+        android:paddingBottom="5dp"
         android:background="@drawable/center_circle_drawable"
         android:scaleType="centerInside"
         android:src="@mipmap/ic_bluetooth_48dp" />
@@ -36,11 +37,11 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:background="@drawable/center_circle_drawable"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="@string/scan"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/large_text_size"
+        android:textSize="@dimen/small_text_size"
         app:font="fonts/OpenSans-Semibold.ttf" />
 
     <LinearLayout
@@ -60,15 +61,6 @@
             android:textSize="@dimen/medium_text_size"
             android:visibility="invisible"
             app:font="fonts/OpenSans-Regular.ttf" />
-
-        <ImageView
-            android:id="@+id/img_stop_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_stop_white_24dp"
-            android:visibility="invisible"
-            android:tint="@android:color/holo_red_light"/>
 
     </LinearLayout>
 

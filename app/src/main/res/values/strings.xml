@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BluetoothScanner</string>
+    <string name="app_name">Bluetooth Scanner</string>
     <string name="scanning_for_devices">Scanning for devices...</string>
     <string name="scan">Scan</string>
     <string name="bluetooth_unsupported_error">Your phone does not support Bluetooth</string>
@@ -7,7 +7,8 @@
     <string name="ok">Ok</string>
     <string name="location_permissions_error">Location permissions are mandatory</string>
 
-    <string name="device_found_count">%1$s device(s) found</string>
+    <string name="device_found_count">%1$d device(s) found</string>
     <string name="no_devices_found">No devices found</string>
     <string name="stop_scan">Stop scan</string>
+    <string name="stop">Stop</string>
 </resources>

@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.img_center_circle)
     ImageView mImgCenterCircle;
 
-    @BindView(R.id.img_stop_scan)
-    ImageView mImgStopScan;
-
     @BindView(R.id.txt_scan)
     CustomTextView mTxtScan;
 
@@ -60,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_LOCATION = 100;
     private static final int PERMISSION_REQUEST_BLUETOOTH = 101;
+
+    private boolean mIsScanning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
         bluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(bluetoothReceiver, bluetoothFilter);
 
+        mIsScanning = true;
+
         mOuterCircleAnimation.start();
         mInnerCircleAnimation.start();
         mTxtScanStatus.setText(R.string.scanning_for_devices);
         mTxtScanStatus.setVisibility(View.VISIBLE);
-        mTxtScan.setVisibility(View.INVISIBLE);
-        mImgCenterCircle.setVisibility(View.VISIBLE);
-        mImgStopScan.setVisibility(View.VISIBLE);
+        mTxtScan.setText(R.string.stop);
         mBluetoothAdapter.startDiscovery();
 
     }
@@ -113,25 +112,20 @@ public class MainActivity extends AppCompatActivity {
         try {
             unregisterReceiver(bluetoothReceiver);
         } catch (IllegalArgumentException e) {
-            Log.e("Error", "Receieve already unregistered");
+            Log.e("Error", "Receiever already unregistered");
         }
 
-        mOuterCircleAnimation.cancel();
-        mInnerCircleAnimation.cancel();
-
-        mImgCenterCircle.setVisibility(View.INVISIBLE);
-        mTxtScan.setVisibility(View.VISIBLE);
-        mImgStopScan.setVisibility(View.INVISIBLE);
-
-        if (mDeviceCount == 0) {
-            mTxtScanStatus.setText(R.string.no_devices_found);
-        } else {
-            mTxtScanStatus.setVisibility(View.INVISIBLE);
-            Intent intent = new Intent(MainActivity.this, DeviceListActivity.class);
-            intent.putExtra("devices", mDevices);
-            startActivity(intent);
+        if (mOuterCircleAnimation.isRunning()) {
+            mOuterCircleAnimation.cancel();
         }
 
+        if (mInnerCircleAnimation.isRunning()) {
+            mInnerCircleAnimation.cancel();
+        }
+
+        mTxtScan.setText(R.string.scan);
+
+        mIsScanning = false;
         mDeviceCount = 0;
         mDevices.clear();
     }
@@ -170,27 +164,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.txt_scan)
+    @OnClick(R.id.img_center_circle)
     public void onScanClick(View view) {
-        if (BluetoothScannerUtil.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                BluetoothScannerUtil.isPermissionGranted(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (mIsScanning) {
+            // Stop scanning
 
-            if (mBluetoothAdapter.isEnabled()) {
-                discoverDevices();
+            if (mDeviceCount == 0) {
+                mTxtScanStatus.setText(R.string.no_devices_found);
             } else {
-                Intent bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(bluetoothIntent, PERMISSION_REQUEST_BLUETOOTH);
+                mTxtScanStatus.setVisibility(View.INVISIBLE);
+                Intent intent = new Intent(MainActivity.this, DeviceListActivity.class);
+                intent.putExtra("devices", mDevices);
+                startActivity(intent);
             }
 
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_LOCATION);
-        }
-    }
+            cancelDiscovery();
 
-    @OnClick(R.id.img_stop_scan)
-    public void onStopScanClick(View view) {
-        cancelDiscovery();
-        mImgStopScan.setVisibility(View.INVISIBLE);
+        } else {
+            // Start scanning
+
+            if (BluetoothScannerUtil.isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
+                    BluetoothScannerUtil.isPermissionGranted(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                if (mBluetoothAdapter.isEnabled()) {
+                    discoverDevices();
+                } else {
+                    Intent bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(bluetoothIntent, PERMISSION_REQUEST_BLUETOOTH);
+                }
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_LOCATION);
+            }
+        }
     }
 
     @Override
@@ -219,9 +225,6 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device != null && !mDevices.contains(device)) {
-                    Log.i("device name", device.getName());
-                    Log.i("device address", device.getAddress());
-
                     mDevices.add(device);
 
                     mDeviceCount++;
@@ -231,6 +234,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                if (mDeviceCount == 0) {
+                    mTxtScanStatus.setText(R.string.no_devices_found);
+                } else {
+                    mTxtScanStatus.setVisibility(View.INVISIBLE);
+                    Intent deviceListIntent = new Intent(MainActivity.this, DeviceListActivity.class);
+                    deviceListIntent.putExtra("devices", mDevices);
+                    startActivity(deviceListIntent);
+                }
+
                 cancelDiscovery();
             }
 
