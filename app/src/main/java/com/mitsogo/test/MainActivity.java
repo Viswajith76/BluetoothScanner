@@ -156,14 +156,6 @@ public class MainActivity extends AppCompatActivity {
         return animatorSet;
     }
 
-    // Unregister the broadcast receiver
-    private void unregisterReceiver() {
-        try {
-        } catch (IllegalArgumentException e) {
-            Log.e("Error", "Receieve already unregistered");
-        }
-    }
-
     @OnClick(R.id.img_center_circle)
     public void onScanClick(View view) {
         if (mIsScanning) {
